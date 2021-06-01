@@ -40,16 +40,11 @@ type DeleteItemOutput = AWS.DynamoDB.DocumentClient.DeleteItemOutput;
 // type Item = { [index: string]: string };
 const config: IConfig = { region: process.env.REGION || "ap-southeast-1" };
 if (process.env.STAGE === process.env.DYNAMODB_LOCAL_STAGE) {
-  config.accessKeyId = process.env.DYNAMODB_LOCAL_ACCESS_KEY_ID;
-  config.secretAccessKey = process.env.DYNAMODB_LOCAL_SECRET_ACCESS_KEY;
   config.endpoint = process.env.DYNAMODB_LOCAL_ENDPOINT;
 }
 AWS.config.update(config);
 
-const documentClient = new AWS.DynamoDB.DocumentClient({
-  region: "localhost",
-  endpoint: "http://localhost:8000",
-});
+const documentClient = new AWS.DynamoDB.DocumentClient({});
 const s3 = new AWS.S3();
 
 export default class DatabaseService {
@@ -61,8 +56,6 @@ export default class DatabaseService {
       }
 
       const key = `${id}.${extname(imageFile.filename)}`;
-
-      console.log(`writing image to bucket called ${key}`);
 
       const { Location } = await s3
         .upload({

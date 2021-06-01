@@ -15,8 +15,8 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
-      REGION: "${self:custom.region}",
-      STAGE: "${self:custom.stage}",
+      REGION: "${env.DYNAMODB_LOCAL_REGION,self:custom.region}",
+      STAGE: "${env.DYNAMODB_LOCAL_STAGE,self:custom.stage}",
       OTTER_TABLE: "${self:custom.otter_table}",
       IMAGE_BUCKET_NAME: "${self:custom.otterImageBucketName}",
     },
