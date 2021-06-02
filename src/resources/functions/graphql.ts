@@ -1,5 +1,5 @@
 import { ApolloServer } from "apollo-server-lambda";
-import config from "../graphql/config";
+import config from "../../graphql/config";
 
 const server = new ApolloServer(config);
 

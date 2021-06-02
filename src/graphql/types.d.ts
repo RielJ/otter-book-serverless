@@ -23,7 +23,7 @@ export type CreateOtterInput = {
   name: Scalars['String'];
   location: Scalars['String'];
   about: Scalars['String'];
-  imageUrl: Scalars['String'];
+  imageUrl?: Maybe<Scalars['String']>;
 };
 
 export type GetOtterInput = {
@@ -49,15 +49,10 @@ export type Otter = {
   imageUrl?: Maybe<Scalars['String']>;
 };
 
-export type OtterList = {
-  __typename?: 'OtterList';
-  data?: Maybe<Array<Maybe<Otter>>>;
-};
-
 export type Query = {
   __typename?: 'Query';
   getOtter?: Maybe<Otter>;
-  getOtterList?: Maybe<OtterList>;
+  getOtterList?: Maybe<Array<Maybe<Otter>>>;
 };
 
 

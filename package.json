@@ -4,9 +4,10 @@
   "description": "Serverless aws-nodejs-typescript template",
   "main": "serverless.ts",
   "scripts": {
-    "dev": "export AWS_PROFILE=rielj && sls offline start --noPrependStageInUrl",
+    "dev": "export AWS_PROFILE=rielj && sls offline start --noPrependStageInUrl --stage dev",
     "dynamodb-admin": "export AWS_REGION=localhost && dynamodb-admin -o",
-    "generate": "graphql-codegen"
+    "generate": "graphql-codegen",
+    "deploy": "export AWS_PROFILE=rielj && sls deploy --stage prod"
   },
   "engines": {
     "node": ">=14.15.0"

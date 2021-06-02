@@ -1,1 +1,1 @@
-export { graphql } from "./functions/graphql";
+export { graphql } from "./src/resources/functions/graphql";

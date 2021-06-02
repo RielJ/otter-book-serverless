@@ -1,6 +1,4 @@
 import * as AWS from "aws-sdk";
-import { Upload } from "../../graphql/types";
-import { extname } from "path";
 
 interface IConfig {
   region: string;
@@ -45,34 +43,8 @@ if (process.env.STAGE === process.env.DYNAMODB_LOCAL_STAGE) {
 AWS.config.update(config);
 
 const documentClient = new AWS.DynamoDB.DocumentClient({});
-const s3 = new AWS.S3();
 
 export default class DatabaseService {
-  _upload = async (imageFile: Upload, id: string): Promise<string> => {
-    try {
-      const allowedMimes = ["image/jpeg", "image/png", "image/jpg"];
-      if (!allowedMimes.includes(imageFile.mimetype)) {
-        throw Error("File Type Error");
-      }
-
-      const key = `${id}.${extname(imageFile.filename)}`;
-
-      const { Location } = await s3
-        .upload({
-          Body: imageFile.createReadStream(),
-          Key: key,
-          ContentType: imageFile.mimetype,
-          Bucket: process.env.IMAGE_BUCKET_NAME,
-          ACL: "public-read",
-        })
-        .promise();
-
-      return Location;
-    } catch (error) {
-      console.log("error", error);
-      throw error("failed to upload image");
-    }
-  };
   _create = async (params: PutItem): Promise<PutItemOutput> => {
     try {
       return await documentClient.put(params).promise();

@@ -1,5 +1,5 @@
 import { Context } from "../../../config";
-import { Otter, QueryGetOtterArgs } from "../../../types/types";
+import { QueryGetOtterArgs } from "src/graphql/types";
 
 export default async function getOtter(
   _: any,

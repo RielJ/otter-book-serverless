@@ -1,5 +1,5 @@
 import type { AWS } from "@serverless/typescript";
-import functions from "./resources/functions";
+import functions from "./src/resources/functions";
 
 const serverlessConfiguration: AWS = {
   service: "rielj-serverless",
@@ -14,18 +14,19 @@ const serverlessConfiguration: AWS = {
       shouldStartNameWithService: true,
     },
     environment: {
+      STAGE: "${self:provider.stage}",
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
-      REGION: "${env.DYNAMODB_LOCAL_REGION,self:custom.region}",
-      STAGE: "${env.DYNAMODB_LOCAL_STAGE,self:custom.stage}",
+      DYNAMODB_LOCAL_REGION: "${env.DYNAMODB_LOCAL_REGION,self:custom.region}",
+      DYNAMODB_LOCAL_STAGE: "dev",
+      DYNAMODB_LOCAL_ENDPOINT: "${env.DYNAMODB_LOCAL_ENDPOINT}",
       OTTER_TABLE: "${self:custom.otter_table}",
-      IMAGE_BUCKET_NAME: "${self:custom.otterImageBucketName}",
     },
     iam: {
       role: {
         statements: [
           {
             Effect: "Allow",
-            Action: ["dynamodb:*", "s3:*"],
+            Action: ["dynamodb:*"],
             Resource: [{ "Fn::GetAtt": ["OtterTable", "Arn"] }],
           },
         ],
@@ -42,13 +43,6 @@ const serverlessConfiguration: AWS = {
     stage: "${opt:stage, self:provider.stage}",
     otter_table:
       "${self:service}-otter-table-${opt:stage, self:provider.stage}",
-    otterImageBucketName: "otter-images-bucket",
-    table_throughputs: {
-      prod: 5,
-      default: 1,
-    },
-    table_throughput:
-      "${self:custom.table_throughputs.${self:custom.stage}, self:custom.table_throughputs.default}",
     dynamodb: {
       stages: ["dev"],
       start: {
@@ -75,17 +69,9 @@ const serverlessConfiguration: AWS = {
   package: {
     individually: true,
   },
-  // import the function via paths
   functions,
   resources: {
     Resources: {
-      OtterImageBucket: {
-        Type: "AWS::S3::Bucket",
-        Properties: {
-          BucketName: "${self.provider.environment.IMAGE_BUCKET_NAME}",
-          AccessControl: "PublicRead",
-        },
-      },
       OtterTable: {
         Type: "AWS::DynamoDB::Table",
         Properties: {

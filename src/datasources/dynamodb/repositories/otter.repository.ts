@@ -1,5 +1,5 @@
 import DatabaseService from "../services/dynamodb.service";
-import { Otter } from "../../graphql/types/types";
+import { Otter } from "src/graphql/types";
 type PutItemOutput = AWS.DynamoDB.DocumentClient.PutItemOutput;
 type GetItemOutput = AWS.DynamoDB.DocumentClient.GetItemOutput;
 type QueryItemOutput = AWS.DynamoDB.DocumentClient.QueryOutput;
